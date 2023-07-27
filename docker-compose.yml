@@ -8,9 +8,9 @@ services:
       - '5432:5432'
     environment:
       - POSTGRES_HOST=localhost
-      - POSTGRES_USE=node_base
-      - POSTGRES_PASSWORD=node_base
-      - POSTGRES_DATABASE=node_base
+      - POSTGRES_USER=nodebase
+      - POSTGRES_PASSWORD=nodebase
+      - POSTGRES_DATABASE=nodebase
     command: postgres
     restart: always
 
