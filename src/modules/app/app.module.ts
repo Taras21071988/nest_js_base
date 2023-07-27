@@ -3,9 +3,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from '../user/user.module';
 import { ImagesModule } from '../images/images.module';
+import { ConfigModule } from '@nestjs/config';
+import configuretions from '../../configurations';
 
 @Module({
-  imports: [UserModule, ImagesModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, load: [configuretions] }),
+    UserModule,
+    ImagesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
