@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from '../user/user.module';
+import { UserModule } from '../users/user.module';
 import { ImagesModule } from '../images/images.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import configuretions from '../../configurations';
+import { User } from '../users/models/user.model';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import configuretions from '../../configurations';
         database: configServise.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [],
+        models: [User],
       }),
     }),
     UserModule,
