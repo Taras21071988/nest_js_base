@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDTO } from './dto';
+import { CreateUserDTO, UpdateUserDTO } from './dto';
 import { BadRequestException } from '@nestjs/common';
-import { AppError } from 'src/common/errors';
+import { AppError } from 'src/common/constants/errors';
 
 @Injectable()
 export class UserService {
@@ -23,8 +23,6 @@ export class UserService {
   }
 
   async createUser(dto: CreateUserDTO): Promise<CreateUserDTO> {
-    const existUser = await this.findUserByEmail(dto.email);
-    if (existUser) throw new BadRequestException(AppError.USER_EXIST);
     dto.password = await this.hashPassword(dto.password);
     await this.userRepository.create({
       firstName: dto.firstName,
@@ -33,5 +31,21 @@ export class UserService {
       password: dto.password,
     });
     return dto;
+  }
+  async publicUser(email: string) {
+    return this.userRepository.findOne({
+      where: { email },
+      attributes: { exclude: ['password'] },
+    });
+  }
+  async updateUser(email: string, dto: UpdateUserDTO): Promise<UpdateUserDTO> {
+    await this.userRepository.update(dto, {
+      where: { email },
+    });
+    return dto;
+  }
+  async deleteUser(email: string) {
+    await this.userRepository.destroy({ where: { email } });
+    return true;
   }
 }
