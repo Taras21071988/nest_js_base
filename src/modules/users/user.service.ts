@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDTO, UpdateUserDTO } from './dto';
 import { BadRequestException } from '@nestjs/common';
 import { AppError } from 'src/common/constants/errors';
+import { Watchlist } from '../watchlist/models/watchlist.model';
 
 @Injectable()
 export class UserService {
@@ -35,6 +36,10 @@ export class UserService {
   async publicUser(email: string) {
     return this.userRepository.findOne({
       where: { email },
+      include: {
+        model: Watchlist,
+        required: false,
+      },
       attributes: { exclude: ['password'] },
     });
   }
