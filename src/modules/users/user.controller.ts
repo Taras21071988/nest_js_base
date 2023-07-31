@@ -27,9 +27,11 @@ export class UserController {
     return this.userService.updateUser(user.email, updateDto);
   }
 
+  @ApiTags('API')
+  @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard)
   @Delete()
-  deleteUser(@Req() request) {
+  deleteUser(@Req() request): Promise<boolean> {
     const user = request.user;
     return this.userService.deleteUser(user.email);
   }
